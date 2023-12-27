@@ -73,12 +73,13 @@ app.post("/signup", async (request, response) => {
 app.post("/auth", (request, response) => {
   if (!request.body) return response.sendStatus(400);
   if (!request.body?.phone_number) return response.sendStatus(400);
+  if (!request.body?.phone_number) return response.sendStatus(400);
 
   console.log(request.body);
 
   const code = String(Math.trunc(Math.random() * (99999 - 10000) + 10000));
 
-  formData.mobile_phone = `${request.body.phone}`;
+  formData.mobile_phone = `${request.body.phone_number}`;
   formData.message = `${code} - Код для подтверждения в Table Booker`;
 
   sendSMS();
