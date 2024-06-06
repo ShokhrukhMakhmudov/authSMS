@@ -4,6 +4,7 @@ const dotenv = require("dotenv");
 const axios = require("axios");
 const crypto = require("crypto");
 const { supabase } = require("./supabase");
+const FormData = require("form-data");
 
 dotenv.config();
 
@@ -18,11 +19,6 @@ function computeSHA256Hash(data) {
   hash.update(data);
   return hash.digest("hex");
 }
-
-const formData = {
-  from: "Ansor Mall",
-  callback_url: "http://0000.uz/test.php",
-};
 
 // app.get("/registration", async (req, res) => {
 //   try {
@@ -78,10 +74,7 @@ app.post("/auth", (request, response) => {
 
   const code = String(Math.trunc(Math.random() * (99999 - 10000) + 10000));
 
-  formData.mobile_phone = `${request.body.phone_number}`;
-  formData.message = `Ansor Mall Konkursida chiptani ro'yxadan o'tkazish uchun tasdiqlash kodi: ${code}`;
-
-  sendSMS();
+  sendSMS(request.body.phone_number, code);
 
   response.json({
     hash: computeSHA256Hash(code),
@@ -93,26 +86,39 @@ app.post("/auth", (request, response) => {
 const api = "http://notify.eskiz.uz/api/message/sms/send";
 
 const token =
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MDYxMTc0NTAsImlhdCI6MTcwMzUyNTQ1MCwicm9sZSI6InRlc3QiLCJzdWIiOiI1OTg1In0.C-3yul3PWMj0qLVZSWIWjZXD57U6TJYIO04V55FSsVg";
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MjAyNTkzMzgsImlhdCI6MTcxNzY2NzMzOCwicm9sZSI6InRlc3QiLCJzaWduIjoiMThmNTQ0ZTc2NjE4MjIyMmRjMGU0YzM1OTdhNjY0ZDM4YjE5MWFmNDEwYWExODliNjUyZDA4NTY4MDRlMDlkZiIsInN1YiI6IjU5ODUifQ.WGmM-hR8YeFgePDvugYhOnjsvupghjKIuRaBDofZs0M";
 
 const headers = {
   "Content-Type": "application/x-www-form-urlencoded",
   Authorization: `Bearer ${token}`,
 };
 
-async function sendSMS() {
+async function sendSMS(phoneNumber, verificationCode) {
+  let formData = {
+    mobile_phone: phoneNumber,
+    message: `Bu Eskiz dan test`,
+    from: "Ansor Mall",
+    callback_url: "http://0000.uz/test.php",
+  };
+  // new FormData();
+  // formData.append("mobile_phone", phoneNumber);
+  // formData.append("message", `${verificationCode} - your code`);
+  // formData.append("from", "Ansor Malll");
+  // formData.append("callback_url", "http://0000.uz/test.php");
+
   axios
     .post(api, formData, { headers })
     .then((response) => {
       console.log("Response:", response.data);
     })
     .catch((error) => {
-      console.error("Error:", error.message);
+      console.log(phoneNumber, verificationCode);
+      console.error("Error:", error);
     });
 }
 
 const port = process.env.PORT || 8081;
 
 app.listen(port, () => {
-  console.log("server is running");
+  console.log("server is running: ", port);
 });
