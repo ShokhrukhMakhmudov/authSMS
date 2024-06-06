@@ -4,7 +4,6 @@ const dotenv = require("dotenv");
 const axios = require("axios");
 const crypto = require("crypto");
 const { supabase } = require("./supabase");
-const FormData = require("form-data");
 
 dotenv.config();
 
@@ -72,7 +71,7 @@ app.post("/auth", (request, response) => {
 
   console.log(request.body);
 
-  const code = String(Math.trunc(Math.random() * (99999 - 10000) + 10000));
+  const code = String(Math.trunc(Math.random() * (999999 - 100000) + 100000));
 
   sendSMS(request.body.phone_number, code);
 
