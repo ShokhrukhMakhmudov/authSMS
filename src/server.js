@@ -96,7 +96,7 @@ const token =
   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MDYxMTc0NTAsImlhdCI6MTcwMzUyNTQ1MCwicm9sZSI6InRlc3QiLCJzdWIiOiI1OTg1In0.C-3yul3PWMj0qLVZSWIWjZXD57U6TJYIO04V55FSsVg";
 
 const headers = {
-  "Content-Type": "application/json", // adjust the content type if needed
+  "Content-Type": "application/x-www-form-urlencoded",
   Authorization: `Bearer ${token}`,
 };
 
