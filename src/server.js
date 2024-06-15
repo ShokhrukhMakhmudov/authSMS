@@ -56,8 +56,17 @@ app.post("/registration", async (request, response) => {
     .from("registration")
     .update({ phone_number, status: true })
     .eq("id", code)
+    .eq("status", false)
     .select();
 
+  if (data.length === 0) {
+    response
+      .status(400)
+      .json({
+        error: "Ushbu chipta(QR-code) mavjud emas yoki ro'yxatdan o'tkazilgan!",
+      });
+    return;
+  }
   if (!data) {
     response.json(error);
     return;
@@ -96,7 +105,7 @@ async function sendSMS(phoneNumber, verificationCode) {
   let formData = {
     mobile_phone: phoneNumber,
 
-    template: `Ansor Mall (ansormall.uz) konkurs dasturida ishtirok etish uchun tasdiqlash kodi: ${verificationCode}. Konkurs to'g'risida ma'lumot konkurs.ansormall.uz da.`,
+    message: `Ansor Mall (ansormall.uz) konkurs dasturida ishtirok etish uchun tasdiqlash kodi: ${verificationCode}. Konkurs to'g'risida ma'lumot konkurs.ansormall.uz da.`,
     from: "Ansor Mall",
     callback_url: "http://0000.uz/test.php",
   };
