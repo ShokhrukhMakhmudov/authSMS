@@ -54,7 +54,8 @@ app.post("/registration", async (request, response) => {
 
   const { data, error } = await supabase
     .from("registration")
-    .insert([{ phone_number, code }])
+    .update({ phone_number, status: true })
+    .eq("id", code)
     .select();
 
   if (!data) {
@@ -78,14 +79,13 @@ app.post("/auth", (request, response) => {
   response.json({
     hash: computeSHA256Hash(code),
     phone: request.body.phone,
-    code,
   });
 });
 
 const api = "http://notify.eskiz.uz/api/message/sms/send";
 
 const token =
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MjAyNTkzMzgsImlhdCI6MTcxNzY2NzMzOCwicm9sZSI6InRlc3QiLCJzaWduIjoiMThmNTQ0ZTc2NjE4MjIyMmRjMGU0YzM1OTdhNjY0ZDM4YjE5MWFmNDEwYWExODliNjUyZDA4NTY4MDRlMDlkZiIsInN1YiI6IjU5ODUifQ.WGmM-hR8YeFgePDvugYhOnjsvupghjKIuRaBDofZs0M";
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MjEwMjgxODMsImlhdCI6MTcxODQzNjE4Mywicm9sZSI6InVzZXIiLCJzaWduIjoiYjlkNTY5NmZhYzU5ZjI3YmI4NWI1NzRhNWEwMTA4NGE0MGY2NzI3OWU3ZTU0ZWQxYjBmZTZlMDI5Zjg4MzQ4MyIsInN1YiI6Ijc1ODEifQ.u5Z2tQnnbJXqZCGWVog2b2tK89f9U4cP60Xqn3jad04";
 
 const headers = {
   "Content-Type": "application/x-www-form-urlencoded",
@@ -95,7 +95,8 @@ const headers = {
 async function sendSMS(phoneNumber, verificationCode) {
   let formData = {
     mobile_phone: phoneNumber,
-    message: `Bu Eskiz dan test`,
+
+    template: `Ansor Mall (ansormall.uz) konkurs dasturida ishtirok etish uchun tasdiqlash kodi: ${verificationCode}. Konkurs to'g'risida ma'lumot konkurs.ansormall.uz da.`,
     from: "Ansor Mall",
     callback_url: "http://0000.uz/test.php",
   };
