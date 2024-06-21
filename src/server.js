@@ -9,7 +9,7 @@ dotenv.config();
 
 const app = express();
 
-app.use(cors({ origin: "*" }));
+app.use(cors({ origin: "*", methods: ["POST"] }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
