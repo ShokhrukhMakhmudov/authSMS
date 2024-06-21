@@ -62,13 +62,15 @@ app.post("/registration", async (request, response) => {
   if (data?.length === 0 || !data) {
     response
       .status(404)
-      .send("Ushbu chipta(QR-code) mavjud emas yoki ro'yxatdan o'tkazilgan!");
+      .statusText(
+        "Ushbu chipta(QR-code) mavjud emas yoki ro'yxatdan o'tkazilgan!"
+      );
     return;
   }
 
   if (error) {
     console.log(error);
-    response.status(500).send(error ?? "Serverda xatolik yuz berdi!");
+    response.status(500).statusText(error ?? "Serverda xatolik yuz berdi!");
     return;
   }
 
