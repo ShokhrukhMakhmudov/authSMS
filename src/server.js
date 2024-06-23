@@ -107,7 +107,7 @@ async function sendSMS(phoneNumber, verificationCode) {
   let formData = {
     mobile_phone: phoneNumber,
 
-    message: `Ansor Mall (ansormall.uz) konkurs dasturida ishtirok etish uchun tasdiqlash kodi: ${verificationCode}. Konkurs to'g'risida ma'lumot konkurs.ansormall.uz da.`,
+    message: `Ansor Mall konkurs dasturida ishtirok etish uchun tasdiqlash kodi: ${verificationCode}. Konkurs to'g'risida batafsil ma'lumot ansormall.uz da.`,
     from: "Ansor Mall",
     callback_url: "http://0000.uz/test.php",
   };
